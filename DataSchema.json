@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Financial and Weather Data API Schema",
+  "type": "object",
+  "properties": {
+    "user_id": { "type": "integer" },
+    "full_name": { "type": "string", "pattern": "^[^0-9]+$" },
+    "email": { "type": "string", "format": "email", "pattern": "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$" },
+    "financial_data": {
+      "type": "object",
+      "properties": {
+        "account_balance": { "type": "number" },
+        "income": { "type": "number" },
+        "expense": { "type": "number" },
+        "transactions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "transaction_id": { "type": "integer" },
+              "amount": { "type": "number", "exclusiveMinimum": 0 },
+              "type": { "type": "string", "enum": ["income", "expense"] },
+              "date": { "type": "string", "format": "date-time" }
+            },
+            "required": ["transaction_id", "amount", "type", "date"]
+          }
+        }
+      }
+    },
+    "weather_data": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "temperature": { "type": "number" },
+          "date": { "type": "string", "format": "date-time" }
+        },
+        "required": ["temperature", "date"]
+      }
+    }
+  },
+  "required": ["user_id", "full_name", "email"]
+}
