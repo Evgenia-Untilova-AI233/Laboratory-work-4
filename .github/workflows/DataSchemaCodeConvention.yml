@@ -7,13 +7,14 @@ on:
   pull_request:
 
 jobs:
-  json_linter:
-    name: JSON Schema Check
+  schema_linter:
+    name: JSON and SQL Schema Check
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      # --- JSON перевірка ---
       - name: Install JSONLint
         run: npm install -g @prantlf/jsonlint
 
@@ -22,14 +23,7 @@ jobs:
           echo "Running JSON Linter..."
           jsonlint $GITHUB_WORKSPACE/DataSchema.json
 
-  sql_linter:
-    name: SQL Schema Check
-    runs-on: ubuntu-latest
-    needs: json_linter
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
+      # --- SQL перевірка ---
       - name: Install SQLFluff
         run: pip install sqlfluff
 
@@ -37,4 +31,3 @@ jobs:
         run: |
           echo "Running SQLFluff..."
           sqlfluff lint $GITHUB_WORKSPACE/DataSchema.sql --dialect postgres
-
