@@ -1,0 +1,10 @@
+{ 
+  "user_id": 1, 
+  "full_name": "Olena123", 
+  "email": "olena@@example.com",
+  "financial_data": {
+    "account_balance": "abc",
+    "transactions": [
+      { "transaction_id": "wrong_id", "amount": -200, "type": "invalid_type" }
+    ]
+  }
