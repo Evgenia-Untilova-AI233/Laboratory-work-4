@@ -1,0 +1,44 @@
+name: Data Schema Code Convention
+
+on:
+  push:
+    branches:
+      - main
+      - laboratory-work-4
+  pull_request:
+
+jobs:
+  schema_linter:
+    name: JSON and SQL Schema Check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # --- JSON перевірка ---
+      - name: Install JSONLint
+        run: npm install -g @prantlf/jsonlint
+
+      - name: Validate JSON Schema
+        run: |
+          echo "Running JSON Linter on original schema..."
+          jsonlint $GITHUB_WORKSPACE/DataSchema.json || true
+
+      - name: Validate Modified JSON Schema
+        run: |
+          echo "Running JSON Linter on modified schema..."
+          jsonlint $GITHUB_WORKSPACE/DataSchemaModified.json || true
+
+      # --- SQL перевірка ---
+      - name: Install SQLFluff
+        run: pip install sqlfluff
+
+      - name: Validate SQL Schema
+        run: |
+          echo "Running SQLFluff on original schema..."
+          sqlfluff lint $GITHUB_WORKSPACE/DataSchema.sql --dialect postgres || true
+
+      - name: Validate Modified SQL Schema
+        run: |
+          echo "Running SQLFluff on modified schema..."
+          sqlfluff lint $GITHUB_WORKSPACE/DataSchemaModified.sql --dialect postgres || true
